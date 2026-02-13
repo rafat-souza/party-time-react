@@ -1,4 +1,3 @@
-// senha usuario rafael2 mongodb atlas: ZPHIogskbibvxAJy
 const express = require("express");
 const cors = require("cors");
 const app = express();
