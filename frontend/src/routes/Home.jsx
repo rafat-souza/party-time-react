@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import partyFetch from "../axios/config";
 
+import "./Home.css";
+
 const Home = () => {
   const [parties, setParties] = useState(null);
 
