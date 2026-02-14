@@ -58,3 +58,11 @@ Content-Type: application/json
         }
     ]
 }
+
+###
+
+GET http://localhost:3000/api/parties
+
+###
+
+GET http://localhost:3000/api/parties/699086b923d45fa9f23cf6eb
