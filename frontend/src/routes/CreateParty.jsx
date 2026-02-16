@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import partyFetch from "../axios/config";
 
+import "./Form.css";
+
 const CreateParty = () => {
   const [services, setServices] = useState([]);
 
@@ -57,6 +59,7 @@ const CreateParty = () => {
                   <p className="service-price">R${service.price}</p>
                   <div className="checkbox-container">
                     <input type="checkbox" value={service._id} />
+                    <p>Marque para solicitar</p>
                   </div>
                 </div>
               ))}
