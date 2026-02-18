@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import partyFetch from "../axios/config";
-import useToast from "../hook/useToast";
+import useToast from "../hooks/useToast";
 
 import "./Form.css";
 
