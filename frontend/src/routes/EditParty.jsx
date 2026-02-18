@@ -1,21 +1,15 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import partyFetch from "../axios/config";
 import useToast from "../hooks/useToast";
 
 import "./Form.css";
 
-const CreateParty = () => {
+const EditParty = () => {
+  const { id } = useParams();
+  const [party, setParty] = useState(null);
   const [services, setServices] = useState([]);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [description, setDescription] = useState("");
-  const [budget, setBudget] = useState(0);
-  const [image, setImage] = useState("");
-  const [partyServices, setPartyServices] = useState([]);
-
-  const navigate = useNavigate();
 
   // Função carregar serviços
   useEffect(() => {
@@ -23,56 +17,30 @@ const CreateParty = () => {
       const res = await partyFetch.get("/services");
 
       setServices(res.data);
+
+      loadParty();
+    };
+
+    const loadParty = async () => {
+      const res = await partyFetch.get(`/parties/${id}`);
+
+      setParty(res.data);
     };
 
     loadServices();
   }, []);
 
-  // Função adicionar ou remover serviços
-  const handleServices = (e) => {
-    const checked = e.target.checked;
-    const value = e.target.value;
-
-    const filteredService = services.filter((s) => s._id === value);
-
-    if (checked) {
-      setPartyServices((services) => [...services, filteredService[0]]);
-    } else {
-      setPartyServices((services) => services.filter((s) => s._id !== value));
-    }
-  };
-
-  // Função criar nova festa
-  const createParty = async (e) => {
+  const updateParty = (e) => {
     e.preventDefault();
-
-    try {
-      const party = {
-        title,
-        author,
-        description,
-        budget,
-        image,
-        services: partyServices,
-      };
-
-      const res = await partyFetch.post("/parties", party);
-
-      if (res.status === 201) {
-        navigate("/");
-
-        useToast(res.data.msg);
-      }
-    } catch (error) {
-      useToast(error.response.data.msg, "error");
-    }
   };
+
+  if (!party) return <p>Carregando...</p>;
 
   return (
     <div className="form-page">
-      <h2>Crie sua próxima festa</h2>
-      <p>Defina o seu orçamento e escolha os serviços</p>
-      <form onSubmit={(e) => createParty(e)}>
+      <h2>Editando: {party.title}</h2>
+      <p>Ajuste as informações da sua festa</p>
+      <form onSubmit={(e) => updateParty(e)}>
         <label>
           <span>Nome da festa:</span>
           <input
@@ -80,7 +48,7 @@ const CreateParty = () => {
             placeholder="Seja criativo..."
             required
             onChange={(e) => setTitle(e.target.value)}
-            value={title}
+            value={party.title}
           />
         </label>
         <label>
@@ -90,7 +58,7 @@ const CreateParty = () => {
             placeholder="Quem está dando a festa?"
             required
             onChange={(e) => setAuthor(e.target.value)}
-            value={author}
+            value={party.author}
           />
         </label>
         <label>
@@ -99,7 +67,7 @@ const CreateParty = () => {
             placeholder="Conte mais sobre a festa"
             required
             onChange={(e) => setDescription(e.target.value)}
-            value={description}
+            value={party.description}
           ></textarea>
         </label>
         <label>
@@ -109,7 +77,7 @@ const CreateParty = () => {
             placeholder="Quando você pretende investir?"
             required
             onChange={(e) => setBudget(e.target.value)}
-            value={budget}
+            value={party.budget}
           />
         </label>
         <label>
@@ -119,7 +87,7 @@ const CreateParty = () => {
             placeholder="Insira a URL da imagem"
             required
             onChange={(e) => setImage(e.target.value)}
-            value={image}
+            value={party.image}
           />
         </label>
         <div>
@@ -144,10 +112,10 @@ const CreateParty = () => {
               ))}
           </div>
         </div>
-        <input type="submit" value="Criar festa" className="btn" />
+        <input type="submit" value="Concluir Edição" className="btn" />
       </form>
     </div>
   );
 };
 
-export default CreateParty;
+export default EditParty;
