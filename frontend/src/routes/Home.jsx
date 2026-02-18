@@ -8,6 +8,7 @@ import "./Home.css";
 const Home = () => {
   const [parties, setParties] = useState(null);
 
+  // Resgatar festas
   useEffect(() => {
     const loadParties = async () => {
       const res = await partyFetch.get("/parties");
